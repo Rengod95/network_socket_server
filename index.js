@@ -18,18 +18,28 @@ const io = socketIo(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  console.log("New client connected: ", socket.id);
 
-  socket.on("chat", (msg) => {
-    console.log(msg);
-    io.emit("chat", { name: msg.name, content: msg.content });
+  
+  socket.on("chat", (message) => {
+    console.log("Received chat message: ", message);
+
+  
+    socket.broadcast.emit("chat", message);
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
-  });
-});
+    console.log("Client disconnected: ", socket.id);
 
+    const userExitMessage = {
+      name: `${socket.id}님`,
+      content: "퇴장하셨습니다.",
+    };
+
+    
+    socket.broadcast.emit("chat", userExitMessage);
+  });
+})
 server.listen(8000, () => {
   console.log("listening on *:8000");
 });
