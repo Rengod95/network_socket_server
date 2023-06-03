@@ -37,7 +37,7 @@ io.on("connection", (socket) => {
     };
 
     
-    socket.broadcast.emit("chat", userExitMessage);
+    //socket.broadcast.emit("chat", userExitMessage);
   });
 })
 server.listen(8000, () => {
